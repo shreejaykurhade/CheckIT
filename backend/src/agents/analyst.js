@@ -2,7 +2,7 @@ const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
 const { HumanMessage, SystemMessage } = require("@langchain/core/messages");
 
 const llm = new ChatGoogleGenerativeAI({
-    model: "gemini-1.5-pro",
+    model: "gemini-1.5-flash",
     temperature: 0.2, // Low temperature for more factual reasoning
     maxOutputTokens: 2048,
 });

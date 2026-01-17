@@ -1,21 +1,60 @@
 :root {
-    --bg-color: #ffffff;
-    --text-color: #000000;
-    --accent-color: #ff3e00;
-    /* Intense Orange */
-    --secondary-color: #00ff00;
-    /* Terminal Green */
+    --bg-color: #f8f0e3;
+    /* Light Cream */
+    --text-color: #1a1a1a;
+    --accent-color: #7b2cbf;
+    /* Vivid Purple */
+    --secondary-color: #2a9d8f;
+    /* Teal */
+    --highlight-color: #e9c46a;
+    /* Saffron/Yellow */
+    --error-color: #e76f51;
+    /* Burnt Orange */
     --border-width: 3px;
-    --shadow-offset: 4px;
+    --shadow-offset: 6px;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Courier New', Courier, monospace;
-    /* Monospaced for brutalism */
     margin: 0;
     padding: 0;
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 #root {

@@ -4,7 +4,7 @@ const { HumanMessage, SystemMessage } = require("@langchain/core/messages");
 // Reuse the LLM instance or create a new one with strict json output if needed
 // For simplicity, reusing a similar config
 const llm = new ChatGoogleGenerativeAI({
-    model: "gemini-1.5-pro",
+    model: "gemini-1.5-flash",
     temperature: 0,
 });
 
