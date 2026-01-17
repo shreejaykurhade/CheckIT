@@ -1,0 +1,194 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --accent-color: #ff3e00;
+    /* Intense Orange */
+    --secondary-color: #00ff00;
+    /* Terminal Green */
+    --border-width: 3px;
+    --shadow-offset: 4px;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    /* Monospaced for brutalism */
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Brutalistic Utilities */
+.brutal-box {
+    border: var(--border-width) solid black;
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px black;
+    background: white;
+    padding: 1.5rem;
+    transition: all 0.1s;
+}
+
+.brutal-box:active {
+    box-shadow: 0px 0px 0px 0px black;
+    transform: translate(var(--shadow-offset), var(--shadow-offset));
+}
+
+.brutal-btn {
+    background: var(--text-color);
+    color: white;
+    border: var(--border-width) solid black;
+    padding: 1rem 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.1rem;
+}
+
+.brutal-btn:hover {
+    background: white;
+    color: black;
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px var(--accent-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    flex: 1;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: var(--border-width) solid black;
+    background: #f0f0f0;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    margin-left: 2rem;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-links a:hover {
+    background: var(--accent-color);
+    color: white;
+    padding: 0.2rem 0.5rem;
+}
+
+.nav-links button {
+    margin-left: 2rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Forms */
+input {
+    border: var(--border-width) solid black;
+    padding: 1rem;
+    font-family: inherit;
+    font-size: 1.2rem;
+    width: 100%;
+    outline: none;
+    background: #f9f9f9;
+}
+
+input:focus {
+    background: #ffffcc;
+    /* Light yellow focus */
+}
+
+/* Headers */
+h1,
+h2,
+h3 {
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 4rem;
+    line-height: 0.9;
+}
+
+/* Cards */
+.result-section {
+    margin-top: 3rem;
+}
+
+.score-card {
+    border: var(--border-width) solid black;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.score-high {
+    background-color: #4cd137;
+}
+
+/* Green */
+.score-medium {
+    background-color: #fbc531;
+}
+
+/* Yellow */
+.score-low {
+    background-color: #e84118;
+    color: white;
+}
+
+/* Red */
+
+.analysis-card {
+    border: var(--border-width) solid black;
+    padding: 2rem;
+    background: white;
+    line-height: 1.6;
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.user-badge {
+    border: 2px solid black;
+    padding: 0.2rem 0.5rem;
+    background: white;
+}
