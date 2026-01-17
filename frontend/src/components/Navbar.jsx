@@ -20,7 +20,10 @@ const Navbar = () => {
         <nav className="navbar">
             <div className="nav-brand">
                 <ShieldCheck className="brand-icon" size={32} />
-                <span>CheckIT</span>
+                <span>
+                    <span style={{ color: 'black' }}>Check</span>
+                    <span style={{ color: 'var(--accent-color)' }}>IT</span>
+                </span>
             </div>
             <div className="nav-links" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                 <div className="user-badge" style={{ fontWeight: 'bold' }}>

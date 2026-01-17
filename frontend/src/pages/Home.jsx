@@ -65,10 +65,37 @@ const Home = () => {
 
                     <div className="analysis-box brutal-box">
                         <h3>// ANALYSIS LOG</h3>
-                        <div className="markdown-content" style={{ textAlign: 'left' }}>
-                            {result.analysis}
+                        <div className="markdown-content" style={{ textAlign: 'left', whiteSpace: 'pre-wrap' }}>
+                            {result.analysis?.split('### Sources')[0] || result.analysis}
                         </div>
                     </div>
+
+                    {result.analysis?.includes('### Sources') && (
+                        <div className="brutal-box" style={{ marginTop: '2rem', borderLeft: '10px solid var(--secondary-color)' }}>
+                            <h3>// SOURCES & REFERENCES</h3>
+                            <div style={{ textAlign: 'left' }}>
+                                {result.analysis.split('### Sources')[1]?.split('\n')
+                                    .filter(line => line.trim())
+                                    .map((line, idx) => {
+                                        const match = line.match(/(\d+)\.\s*\[([^\]]+)\]\(([^)]+)\)/);
+                                        if (match) {
+                                            const [, num, title, url] = match;
+                                            return (
+                                                <div key={idx} style={{ marginBottom: '1rem', padding: '0.5rem', background: '#f9f9f9', border: '2px solid black' }}>
+                                                    <strong>[{num}]</strong>{' '}
+                                                    <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--secondary-color)', textDecoration: 'underline', fontWeight: 'bold' }}>
+                                                        {title}
+                                                    </a>
+                                                    <br />
+                                                    <span style={{ fontSize: '0.85rem', color: '#555', wordBreak: 'break-all' }}>{url}</span>
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    })}
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

@@ -25,15 +25,31 @@ async function analystAgent(state) {
   4. STRICTLY GROUND your analysis in the provided text. DO NOT Hallucinate.
   5. Be CONCISE.
   
-  Output Format:
-  - Conclusion: [True/False/Misleading]
-  - Summary: [Detailed explanation]
-  - Evidence: [Bulleted list of facts from snippets]
+  **OUTPUT FORMAT (MANDATORY):**
+  
+  - **Conclusion**: True/False/Misleading
+  - **Summary**: Your analysis with citations [1], [2]
+  - **Evidence**: Bullet points with citations [1], [2]
   
   ### Sources
-  - [Title of Source 1](URL 1)
-  - [Title of Source 2](URL 2)
-  (Ensure these are valid, clickable Markdown links from the provided search results).
+  1. [Descriptive Title Based On Content](Full URL)
+  2. [Descriptive Title Based On Content](Full URL)
+  
+  **SOURCES SECTION RULES:**
+  1. **YOU MUST INCLUDE THE SOURCES SECTION.**
+  2. **CRITICAL**: The search engine returns messy URL titles. IGNORE the URL title from the JSON.
+  3. **CREATE YOUR OWN DESCRIPTIVE TITLE** based on what the snippet/content actually talks about.
+  4. **Example**: If snippet talks about "Delhi fog disrupts flights" but URL says "NFL Football", 
+     write: "[Delhi Fog Disrupts Flight Operations - Times of India](actual-url)"
+  5. Include the actual URL from the search results.
+  6. Use numbered citations [1], [2] in your analysis.
+  
+  Example Output:
+  "Dense fog disrupted flights [1]. The AQI reached 'very poor' levels [2]."
+  
+  ### Sources
+  1. [Delhi Airport Flight Delays Due to Dense Fog - Times of India](https://timesofindia.com/...)
+  2. [Air Quality Worsens in Delhi NCR - NDTV](https://ndtv.com/...)
   `;
 
     try {
