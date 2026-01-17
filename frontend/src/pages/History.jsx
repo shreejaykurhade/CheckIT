@@ -49,14 +49,14 @@ const History = () => {
                                         SCORE: {score || 'N/A'}
                                     </span>
                                     <p style={{ fontWeight: 'bold', marginTop: '1rem', fontSize: '1.2rem' }}>
-                                        {item.query.length > 50 ? item.query.substring(0, 50) + '...' : item.query}
+                                        {item.query}
                                     </p>
                                     <p style={{ fontSize: '0.9rem', color: '#666' }}>
                                         {new Date(item.timestamp).toLocaleDateString()}
                                     </p>
 
                                     {/* Detailed Log Preview */}
-                                    <div style={{ marginTop: '1rem', fontSize: '0.85rem', color: '#333', maxHeight: '150px', overflowY: 'auto', borderTop: '1px solid #ddd', paddingTop: '0.5rem' }}>
+                                    <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#333', borderTop: '1px solid #ddd', paddingTop: '0.5rem' }}>
                                         {(() => {
                                             let content = item.analysis;
 
