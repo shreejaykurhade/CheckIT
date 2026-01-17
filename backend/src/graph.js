@@ -55,4 +55,30 @@ async function runAgent(query) {
     return result;
 }
 
-module.exports = { runAgent };
+// Auditor workflow (Separate graph for clarity)
+const auditorWorkflow = new StateGraph({
+    channels: graphState
+});
+
+const { auditorAgent } = require("./agents/auditor");
+const { parallelInvestigatorAgent } = require("./agents/parallel_investigator");
+
+// Use parallel investigator for deep audit
+auditorWorkflow.addNode("investigator", parallelInvestigatorAgent);
+auditorWorkflow.addNode("auditor", auditorAgent);
+
+auditorWorkflow.addEdge("investigator", "auditor");
+auditorWorkflow.setEntryPoint("investigator");
+auditorWorkflow.addEdge("auditor", END);
+
+const auditorApp = auditorWorkflow.compile();
+
+async function runDeepAudit(query) {
+    const inputs = {
+        messages: [{ content: query, name: "user" }]
+    };
+    const result = await auditorApp.invoke(inputs);
+    return result;
+}
+
+module.exports = { runAgent, runDeepAudit };

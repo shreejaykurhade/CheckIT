@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShieldCheck, History, Search, LogOut } from 'lucide-react';
+import { ShieldCheck, History, Search, LogOut, Scale } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
@@ -34,6 +34,9 @@ const Navbar = () => {
                 </Link>
                 <Link to="/app/history" className={location.pathname === '/app/history' ? 'active' : ''} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                     <History size={20} /> ARCHIVES
+                </Link>
+                <Link to="/app/dao-cases" className={location.pathname === '/app/dao-cases' ? 'active' : ''} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <Scale size={20} /> DAO VOTES
                 </Link>
                 <button className="brutal-btn" onClick={handleLogout} style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                     <LogOut size={16} /> LOGOUT

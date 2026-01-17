@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, Loader } from 'lucide-react';
+import { Search, Loader, Scale, Clock, TrendingUp, Lightbulb } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
+    const [recentSearches, setRecentSearches] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchRecentSearches();
+    }, []);
+
+    const fetchRecentSearches = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/api/history');
+            setRecentSearches(response.data.slice(0, 5)); // Get last 5
+        } catch (error) {
+            console.error('Error fetching recent searches:', error);
+        }
+    };
 
     const handleCheck = async (e) => {
         e.preventDefault();
@@ -16,35 +32,166 @@ const Home = () => {
         setError(null);
         setResult(null);
 
-        // Mock API call for now if backend isn't ready, but we'll try the real one
         try {
             const response = await axios.post('http://localhost:3000/api/check', { query });
             setResult(response.data);
+            fetchRecentSearches(); // Refresh recent searches
         } catch (err) {
-            console.error(err);
-            setError('SYSTEM FAILURE: Unable to contact verification servers.');
+            setError(err.response?.data?.error || 'An error occurred');
         } finally {
             setLoading(false);
         }
     };
 
+    const handleRecentSearchClick = (searchQuery) => {
+        setQuery(searchQuery);
+        setResult(null);
+    };
+
+    const getScoreClass = (score) => {
+        if (score >= 40 && score <= 60) return 'score-medium';
+        if (score >= 50) return 'score-high';
+        return 'score-low';
+    };
+
+    const trendingTopics = [
+        "Delhi fog January 2026",
+        "India budget 2026",
+        "Cricket world cup updates",
+        "Lok Sabha elections 2026"
+    ];
+
     return (
         <div className="container">
-            <div className="brutal-box" style={{ borderBottomWidth: '5px' }}>
-                <form onSubmit={handleCheck} style={{ display: 'flex', gap: '1rem' }}>
-                    <input
-                        type="text"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder="INPUT CLAIM FOR VERIFICATION..."
-                        disabled={loading}
-                        style={{ flex: 1 }}
-                    />
-                    <button type="submit" className="brutal-btn" disabled={loading}>
-                        {loading ? <Loader className="spin" /> : <Search />}
-                    </button>
-                </form>
-            </div>
+            {!result && (
+                <>
+                    <div className="hero-section" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: '1rem' }}>
+                            VERIFY INDIAN NEWS
+                        </h1>
+                        <p style={{ fontSize: '1.2rem', color: '#666', maxWidth: '600px', margin: '0 auto 2rem' }}>
+                            AI-powered fact-checking for Indian news. Get instant Trust Scores backed by verified sources.
+                        </p>
+                    </div>
+
+                    <form onSubmit={handleCheck} style={{ marginBottom: '4rem' }}>
+                        <div style={{ position: 'relative', maxWidth: '1100px', margin: '0 auto', display: 'flex' }}>
+                            <input
+                                type="text"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                placeholder="Enter a claim or news headline to verify..."
+                                disabled={loading}
+                                style={{
+                                    flex: 1,
+                                    paddingRight: '1rem',
+                                    borderRight: 'none'
+                                }}
+                            />
+                            <button
+                                type="submit"
+                                className="brutal-btn"
+                                disabled={loading || !query.trim()}
+                                style={{
+                                    padding: '1rem 1.5rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    borderLeft: '4px solid black',
+                                    whiteSpace: 'nowrap'
+                                }}
+                            >
+                                {loading ? <Loader className="spin" size={20} /> : <Search size={20} />}
+                                {loading ? 'CHECKING...' : 'CHECK'}
+                            </button>
+                        </div>
+                    </form>
+
+                    {/* Recent Searches */}
+                    {recentSearches.length > 0 && (
+                        <div className="brutal-box" style={{ marginBottom: '2rem', borderLeft: '10px solid var(--secondary-color)' }}>
+                            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: 0 }}>
+                                <Clock size={24} /> RECENT SEARCHES
+                            </h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
+                                {recentSearches.map((item) => (
+                                    <div
+                                        key={item._id}
+                                        onClick={() => handleRecentSearchClick(item.query)}
+                                        style={{
+                                            padding: '0.8rem',
+                                            background: '#f9f9f9',
+                                            border: '2px solid black',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            transition: 'all 0.2s'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.background = 'var(--highlight-color)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.background = '#f9f9f9'}
+                                    >
+                                        <span style={{ fontWeight: 'bold' }}>
+                                            {item.query.length > 60 ? item.query.substring(0, 60) + '...' : item.query}
+                                        </span>
+                                        <span style={{
+                                            fontSize: '1.2rem',
+                                            fontWeight: 'bold',
+                                            color: item.grading?.score >= 40 && item.grading?.score <= 60 ? '#fbc531' :
+                                                item.grading?.score >= 50 ? 'green' : 'red'
+                                        }}>
+                                            {item.grading?.score || 'N/A'}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                        {/* Trending Topics */}
+                        <div className="brutal-box" style={{ borderLeft: '10px solid var(--accent-color)' }}>
+                            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: 0 }}>
+                                <TrendingUp size={24} /> TRENDING TOPICS
+                            </h3>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>
+                                {trendingTopics.map((topic, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => handleRecentSearchClick(topic)}
+                                        style={{
+                                            padding: '0.5rem 1rem',
+                                            background: 'white',
+                                            border: '2px solid black',
+                                            cursor: 'pointer',
+                                            fontFamily: 'inherit',
+                                            fontSize: '0.9rem',
+                                            fontWeight: 'bold'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.background = 'var(--highlight-color)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
+                                    >
+                                        {topic}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Tips */}
+                        <div className="brutal-box" style={{ borderLeft: '10px solid var(--highlight-color)' }}>
+                            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: 0 }}>
+                                <Lightbulb size={24} /> TIPS FOR BEST RESULTS
+                            </h3>
+                            <ul style={{ marginTop: '1rem', lineHeight: '1.8' }}>
+                                <li>Be specific with dates and locations</li>
+                                <li>Include key names and numbers</li>
+                                <li>Use complete sentences</li>
+                                <li>Avoid opinion-based queries</li>
+                            </ul>
+                        </div>
+                    </div>
+                </>
+            )}
 
             {error && (
                 <div className="brutal-box" style={{ marginTop: '2rem', backgroundColor: '#ffe6e6', borderColor: 'red' }}>
@@ -55,6 +202,35 @@ const Home = () => {
 
             {result && (
                 <div className="result-section">
+                    {result.daoCase && (
+                        <div className="brutal-box" style={{
+                            background: 'var(--highlight-color)',
+                            border: '5px solid black',
+                            marginBottom: '2rem',
+                            padding: '2rem'
+                        }}>
+                            <h2 style={{ margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <Scale size={28} /> ESCALATED TO TRUTH DAO
+                            </h2>
+                            <p style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>
+                                {result.daoCase.message}
+                            </p>
+                            <p style={{ fontWeight: 'bold' }}>
+                                Case ID: <code style={{ background: 'white', padding: '0.3rem 0.6rem' }}>{result.daoCase.caseId}</code>
+                            </p>
+                            <p style={{ fontSize: '0.9rem', marginTop: '1rem', fontStyle: 'italic' }}>
+                                Community voting deadline: {new Date(result.daoCase.votingDeadline).toLocaleDateString()}
+                            </p>
+                            <button
+                                className="brutal-btn"
+                                style={{ marginTop: '1rem', background: 'black', color: 'white' }}
+                                onClick={() => navigate(`/app/dao/${result.daoCase.caseId}`)}
+                            >
+                                VOTE ON THIS CASE →
+                            </button>
+                        </div>
+                    )}
+
                     {result.grading && (
                         <div className={`score-card ${getScoreClass(result.grading.score)}`}>
                             <h1 style={{ fontSize: '5rem', margin: 0 }}>{result.grading.score}</h1>
@@ -64,9 +240,76 @@ const Home = () => {
                     )}
 
                     <div className="analysis-box brutal-box">
-                        <h3>// ANALYSIS LOG</h3>
+                        <h3>// DETAILED INVESTIGATION LOG</h3>
                         <div className="markdown-content" style={{ textAlign: 'left', whiteSpace: 'pre-wrap' }}>
-                            {result.analysis?.split('### Sources')[0] || result.analysis}
+                            {(() => {
+                                let content = result.analysis;
+
+                                // Helper to render structured data
+                                const renderStructured = (data) => (
+                                    <div>
+                                        {data.summary && (
+                                            <>
+                                                <h4 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '1rem', textTransform: 'uppercase' }}>SUMMARY</h4>
+                                                <p>{data.summary}</p>
+                                            </>
+                                        )}
+                                        {data.evidence && data.evidence.length > 0 && (
+                                            <>
+                                                <h4 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '1.5rem', textTransform: 'uppercase' }}>EVIDENCE</h4>
+                                                <ul style={{ paddingLeft: '1.5rem', marginTop: '0.5rem' }}>
+                                                    {data.evidence.map((ev, k) => <li key={k}>{ev}</li>)}
+                                                </ul>
+                                            </>
+                                        )}
+                                        {data.conclusion && (
+                                            <>
+                                                <h4 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '1.5rem', textTransform: 'uppercase' }}>CONCLUSION</h4>
+                                                <p>{data.conclusion}</p>
+                                            </>
+                                        )}
+                                    </div>
+                                );
+
+                                // Case 1: Already an object
+                                if (typeof content === 'object' && content !== null) {
+                                    return renderStructured(content);
+                                }
+
+                                // Case 2: String that might be JSON
+                                if (typeof content === 'string') {
+                                    if (content.trim().startsWith('{') || content.includes('"summary":')) {
+                                        try {
+                                            const json = JSON.parse(content);
+                                            return renderStructured(json);
+                                        } catch (e) {
+                                            // Fall through to text rendering
+                                        }
+                                    }
+
+                                    // Case 3: Regular text (Markdown cleanup)
+                                    const mainContent = content.split('### Sources')[0].trim();
+                                    return mainContent.split('\n').map((line, i) => {
+                                        const cleanLine = line.replace(/\*\*/g, '').replace(/\{/g, '').replace(/\}/g, '');
+                                        if (line.trim().startsWith('#')) {
+                                            return (
+                                                <h4 key={i} style={{
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 'bold',
+                                                    marginTop: '1.5rem',
+                                                    marginBottom: '0.5rem',
+                                                    color: 'black',
+                                                    textTransform: 'uppercase'
+                                                }}>
+                                                    {cleanLine.replace(/#/g, '').trim()}
+                                                </h4>
+                                            );
+                                        }
+                                        return <div key={i}>{cleanLine}</div>;
+                                    });
+                                }
+                                return null;
+                            })()}
                         </div>
                     </div>
 

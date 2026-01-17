@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Globe, ShieldAlert, Database, Lock, Search } from 'lucide-react';
+import { ArrowRight, Globe, ShieldAlert, Database, Lock, Search, Scale } from 'lucide-react';
 import Footer from '../components/Footer';
 
 const Landing = () => {
@@ -107,6 +107,39 @@ const Landing = () => {
                             We don't just say True/False. We give you a <strong>Truth Score (0-100)</strong> based on evidence quality,
                             source authority (government sources get +100), and factual consistency.
                         </p>
+                    </div>
+                </div>
+            </section>
+
+            <section style={{ background: 'black', color: 'white', padding: '4rem 2rem', marginBottom: '4rem' }}>
+                <div className="container" style={{ textAlign: 'center' }}>
+                    <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', marginBottom: '2rem', fontWeight: '900', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
+                        <Scale size={56} /> THE TRUTH DAO
+                    </h2>
+                    <p style={{ fontSize: 'clamp(1rem, 2vw, 1.3rem)', maxWidth: '900px', margin: '0 auto 3rem', lineHeight: '1.8' }}>
+                        When AI encounters a <strong style={{ color: 'var(--highlight-color)' }}>gray area</strong> (Trust Score 40-60%),
+                        the case is automatically escalated to our <strong style={{ color: 'var(--highlight-color)' }}>Truth DAO</strong>
+                        - a decentralized community of verified fact-checkers and journalists.
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', textAlign: 'left' }}>
+                        <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.1)', border: '3px solid white' }}>
+                            <h3 style={{ fontSize: '1.8rem', fontWeight: '800', marginBottom: '1rem' }}>1. Auto-Escalation</h3>
+                            <p style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+                                Contradictory sources? No problem. Cases with ambiguous scores are sent to the community for human review.
+                            </p>
+                        </div>
+                        <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.1)', border: '3px solid white' }}>
+                            <h3 style={{ fontSize: '1.8rem', fontWeight: '800', marginBottom: '1rem' }}>2. Community Voting</h3>
+                            <p style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+                                Token holders vote TRUE or FALSE with reasoning. Majority consensus determines the final verdict.
+                            </p>
+                        </div>
+                        <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.1)', border: '3px solid white' }}>
+                            <h3 style={{ fontSize: '1.8rem', fontWeight: '800', marginBottom: '1rem' }}>3. Incentivized Truth</h3>
+                            <p style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+                                Voters aligned with the eventual truth earn rewards, creating an "Incentivized Truth Market."
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>

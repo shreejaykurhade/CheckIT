@@ -7,6 +7,8 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import History from './pages/History';
 import Result from './pages/Result';
+import DAOVoting from './pages/DAOVoting';
+import DAOCases from './pages/DAOCases';
 import './App.css';
 
 // Protected Route Wrapper
@@ -40,6 +42,16 @@ const AppRoutes = () => {
                 <Route path="/app/result/:id" element={
                     <ProtectedRoute>
                         <Result />
+                    </ProtectedRoute>
+                } />
+                <Route path="/app/dao/:caseId" element={
+                    <ProtectedRoute>
+                        <DAOVoting />
+                    </ProtectedRoute>
+                } />
+                <Route path="/app/dao-cases" element={
+                    <ProtectedRoute>
+                        <DAOCases />
                     </ProtectedRoute>
                 } />
             </Routes>

@@ -53,6 +53,26 @@ async function analystAgent(state) {
   `;
 
     try {
+        // Check if Investigator returned an error
+        try {
+            const parsedResults = JSON.parse(searchResults);
+            if (parsedResults.error) {
+                // No results found - return a clear message
+                const errorAnalysis = {
+                    conclusion: "INSUFFICIENT_DATA",
+                    summary: `Unable to verify this claim. ${parsedResults.message}`,
+                    evidence: ["No credible sources found in trusted Indian databases."],
+                    sources: []
+                };
+                return {
+                    messages: [new HumanMessage({ content: JSON.stringify(errorAnalysis), name: "analyst" })],
+                    analysis_data: JSON.stringify(errorAnalysis)
+                };
+            }
+        } catch (e) {
+            // Not a JSON error object, proceed normally
+        }
+
         const result = await generateWithFallback([
             new SystemMessage(systemPrompt),
             new HumanMessage(`Analyze these search results: ${searchResults} `)
